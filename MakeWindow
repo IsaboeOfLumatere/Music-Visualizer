@@ -13,40 +13,46 @@ public class checkered extends Application {
  
     public static void main(String[] args) {
         launch(args);
+        
+        
     }
  
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws InterruptedException {
         primaryStage.setTitle("checkered");
         Group root = new Group();
         Canvas canvas = new Canvas(400, 400);
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        drawShapes(gc,200);
+        drawShapes(gc,200,100);
         root.getChildren().add(canvas);
         final Scene scene = new Scene(root, 400, 400, Color.BLACK);
         primaryStage.setScene(scene);
         primaryStage.show();
+        contract(gc,5);
+        
     }
     
-    private void drawShapes(GraphicsContext gc, int radius) {
+    private void drawShapes(GraphicsContext gc, int radius,int center) {
         gc.setStroke(Color.WHITE);
-        gc.strokeOval(100,100 , radius, radius);
+        gc.strokeOval(center,center , radius, radius);
     }
 
-    private void contract(GraphicsContext gc, int seconds){
+    private void contract(GraphicsContext gc, int seconds) throws InterruptedException{
+    	Thread.sleep(2000);
     	for(int i = 0; i<seconds; i++){
-    		set(gc, (seconds-i)*100/seconds);
+    		set(gc, (seconds-i)*100/seconds,100+(i)*100/seconds );
+    		Thread.sleep(1000);
     	}
     	reset(gc);
     }
     
-   private void set(GraphicsContext gc, int radius){
+   private void set(GraphicsContext gc, int radius, int center){
       gc.fillRect(0,0,400,400);
-      drawShapes(gc,radius);
+      drawShapes(gc,radius, center);
    }
    
    private void reset(GraphicsContext gc){
-	   drawShapes(gc,200);
+	   set(gc,200, 100);
    }
 }
 
